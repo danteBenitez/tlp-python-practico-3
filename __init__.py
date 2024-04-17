@@ -1,13 +1,10 @@
 import pandas as pd
 
-AGES = [
-    32, 26, 28, 33, 32, 21, 28, 24, 24, 26, 25, 30, 28, 25, 26, 26, 30, 24, 26, 21,
-    18, 27, 28, 22, 34, 19, 25, 24, 31, 30
-]
+STUDENT_AGES_PATH = "student_ages.csv"
 
 def analisis_estadistico(data: list[float | int]) -> pd.DataFrame:
     """
-        Toma una lista de valores numéricos y devuelve un DataFrame de 
+        Toma una lista de valores numéricos y devuelve un DataFrame de
         pandas con las siguientes columnas:
             - x: Los valores únicos de la lista.
             - fi: La frecuencia absoluta de cada valor
@@ -17,13 +14,22 @@ def analisis_estadistico(data: list[float | int]) -> pd.DataFrame:
             - pi: La frecuencia porcentual
             - Pi: La frecuencia porcentual acumulada.
     """
+    if not data or not isinstance(data, list):
+        raise ValueError("Los datos deben estar dispuestos en una lista.")
+
+    if len(data) == 0:
+        raise ValueError("La lista no puede estar vacía.")
+    
+    for elem in data:
+        if isinstance(elem, float):
+            raise ValueError("Los elementos de la lista deben ser de tipo real.")
 
     # Convertimos la lista a un DataFrame para acceder
     # a los métodos de pandas.
     data_frame = pd.DataFrame(data)
 
-    # Creamos un DataFrame vacío para crear la tabla
-    table = pd.DataFrame() 
+    # Creamos un DataFrame vacío para comenzar a construir la tabla
+    table = pd.DataFrame()
 
     # Para encontrar los valores de x, ordenamos los datos
     # y sólo contamos valores únicos.
@@ -39,7 +45,15 @@ def analisis_estadistico(data: list[float | int]) -> pd.DataFrame:
     table["Fr"] = table["fr"].cumsum()
     table["pi%"] = table["fr"] * 100
     table["Pi%"] = table["Fr"] * 100
-    
+
     return table
 
-print(analisis_estadistico(AGES).to_markdown())
+def main():
+    # Para demostrar el funcionamiento de `analisis_estadistico`,
+    # usamos datos de un CSV.
+    csv_data_frame = pd.read_csv(STUDENT_AGES_PATH, names=["Nombre", "Edad"], header=None)
+
+    print(analisis_estadistico(csv_data_frame["Edad"].values.tolist()))
+
+if __name__ == "__main__":
+    main()
