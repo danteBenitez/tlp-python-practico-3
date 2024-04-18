@@ -2,6 +2,12 @@ import pandas as pd
 
 STUDENT_AGES_PATH = "student_ages.csv"
 
+AGES = [
+    19, 29, 19, 22, 23, 19, 30, 19, 19, 19, 20, 20, 20, 18, 22, 19, 34, 
+    34, 21, 21, 22, 28, 29, 19, 20, 19, 25, 28, 21, 22
+]
+
+
 def analisis_estadistico(data: list[float | int]) -> pd.DataFrame:
     """
         Toma una lista de valores numéricos y devuelve un DataFrame de
@@ -19,10 +25,11 @@ def analisis_estadistico(data: list[float | int]) -> pd.DataFrame:
 
     if len(data) == 0:
         raise ValueError("La lista no puede estar vacía.")
-    
+
     for elem in data:
         if isinstance(elem, float):
-            raise ValueError("Los elementos de la lista deben ser de tipo real.")
+            raise ValueError(
+                "Los elementos de la lista deben ser de tipo real.")
 
     # Convertimos la lista a un DataFrame para acceder
     # a los métodos de pandas.
@@ -41,19 +48,19 @@ def analisis_estadistico(data: list[float | int]) -> pd.DataFrame:
 
     # Calculamos el resto de frecuencias.
     table["Fi"] = table["fi"].cumsum()
-    table["fr"] = table["fi"] / (table["fi"].sum())
-    table["Fr"] = table["fr"].cumsum()
-    table["pi%"] = table["fr"] * 100
-    table["Pi%"] = table["Fr"] * 100
+    table["ri"] = table["fi"] / (table["fi"].sum())
+    table["Ri"] = table["ri"].cumsum()
+    table["pi"] = table["ri"] * 100
+    table["Pi"] = table["ri"] * 100
 
     return table
 
+
 def main():
     # Para demostrar el funcionamiento de `analisis_estadistico`,
-    # usamos datos de un CSV.
-    csv_data_frame = pd.read_csv(STUDENT_AGES_PATH, names=["Nombre", "Edad"], header=None)
+    # usamos datos de las edades de compañeros del instituto.
+    print(analisis_estadistico(AGES))
 
-    print(analisis_estadistico(csv_data_frame["Edad"].values.tolist()))
 
 if __name__ == "__main__":
     main()
