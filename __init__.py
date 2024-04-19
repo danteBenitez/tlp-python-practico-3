@@ -33,25 +33,21 @@ def analisis_estadistico(data: list[float | int]) -> pd.DataFrame:
 
     # Convertimos la lista a un DataFrame para acceder
     # a los métodos de pandas.
-    data_frame = pd.DataFrame(data)
+    data_frame = pd.DataFrame(data, columns=["data"])
 
     # Creamos un DataFrame vacío para comenzar a construir la tabla
     table = pd.DataFrame()
 
-    # Para encontrar los valores de x, ordenamos los datos
-    # y sólo contamos valores únicos.
-    table["x"] = data_frame[0].sort_values(ascending=True).unique()
-
     # Para calcular la frecuencia absoluta, agrupamos los valores
     # iguales y tomamos el tamaño de cada grupo.
-    table["fi"] = data_frame.groupby(0).size().values
+    table["fi"] = data_frame.groupby("data").size()
 
     # Calculamos el resto de frecuencias.
     table["Fi"] = table["fi"].cumsum()
     table["ri"] = table["fi"] / (table["fi"].sum())
     table["Ri"] = table["ri"].cumsum()
     table["pi"] = table["ri"] * 100
-    table["Pi"] = table["ri"] * 100
+    table["Pi"] = table["Ri"] * 100
 
     return table
 
