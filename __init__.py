@@ -27,7 +27,7 @@ def analisis_estadistico(data: list[float | int]) -> pd.DataFrame:
         raise ValueError("La lista no puede estar vacía.")
 
     for elem in data:
-        if isinstance(elem, float):
+        if not isinstance(elem, float) and not isinstance(elem, int):
             raise ValueError(
                 "Los elementos de la lista deben ser de tipo real.")
 
